@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="CSS/bootstrap.min.css">
+        <link rel="stylesheet" href="CSS/style.css">
+        <title>docment</title>
+    
+    </head>
+    <script>
+      let calendar = document.querySelector('.calendar')
+
+const month_names =
+ ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+isLeapYear = (year) => {
+    return (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) || (year % 100 === 0 && year % 400 ===0)
+}
+
+getFebDays = (year) => {
+    return isLeapYear(year) ? 29 : 28
+}
+
+generateCalendar = (month, year) => {
+
+    let calendar_days = calendar.querySelector('.calendar-days')
+    let calendar_header_year = calendar.querySelector('#year')
+
+    let days_of_month = [31, getFebDays(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    calendar_days.innerHTML = ''
+
+    let currDate = new Date()
+    if (!month) month = currDate.getMonth()
+    if (!year) year = currDate.getFullYear()
+
+    let curr_month = `${month_names[month]}`
+    month_picker.innerHTML = curr_month
+    calendar_header_year.innerHTML = year
+    
+    let first_day = new Date(year, month, 1)
+
+    for (let i = 0; i <= days_of_month[month] + first_day.getDay() - 1; i++) {
+        let day = document.createElement('div')
+        if (i >= first_day.getDay()) {
+            day.classList.add('calendar-day-hover')
+            day.innerHTML = i - first_day.getDay() + 1
+            day.innerHTML += `<span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>`
+            if (i - first_day.getDay() + 1 === currDate.getDate() && year === currDate.getFullYear() && month === currDate.getMonth()) {
+                day.classList.add('curr-date')
+            }
+        }
+        calendar_days.appendChild(day)
+    }
+}
+
+let month_list = calendar.querySelector('.month-list')
+
+month_names.forEach((e, index) => {
+    let month = document.createElement('div')
+    month.innerHTML = `<div data-month="${index}">${e}</div>`
+    month.querySelector('div').onclick = () => {
+        month_list.classList.remove('show')
+        curr_month.value = index
+        generateCalendar(index, curr_year.value)
+    }
+    month_list.appendChild(month)
+})
+
+let month_picker = calendar.querySelector('#month-picker')
+
+month_picker.onclick = () => {
+    month_list.classList.add('show')
+}
+
+let currDate = new Date()
+
+let curr_month = {value: currDate.getMonth()}
+let curr_year = {value: currDate.getFullYear()}
+
+generateCalendar(curr_month.value, curr_year.value)
+
+document.querySelector('#prev-year').onclick = () => {
+    --curr_year.value
+    generateCalendar(curr_month.value, curr_year.value)
+}
+
+document.querySelector('#next-year').onclick = () => {
+    ++curr_year.value
+    generateCalendar(curr_month.value, curr_year.value)
+}
+
+
+      </script>
+    <body>
+        
+         <!-- navbar -->
+         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <a class=" navbar-brand" href="#">
+                <img src="images/logo.png" width="100" height="100" alt="">
+              </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse mt-1" id="navbarSupportedContent">
+              <ul class=" list navbar-nav ms-auto ">
+                <li class="nav-item-act">
+                  <a class="nav-link text-white" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="#">about us</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-white">services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white ">clinics</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white ">contact us</a>
+                  </li>
+              </ul>
+              <form class="form-inline  my-lg-0">
+                <i class="bi bi-search text-white"></i>
+                <input type="submit" class="btn-log mx-5" value="Log In">
+            </form>
+            </div>
+          </nav>
+          <!-- ///////////////////////////////////// -->
+          <section class="py-5 text-light">
+            <img src="images/calend.png" width="100%" height="740px" class="appoint-calend-img">
+            <h1 class="appoint-calend-h">Appointment Booking</h1>
+            <div class="container appoint-calend-lo">
+                <div class="row align-items-center justify-content-center flex-row-reverse">
+                    <div class="col-md">
+                        <img src="images/Pedodonti.png" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-sm py-4">
+                      <div class="calendar">
+                        <div class="calendar-header">
+                            <span class="month-picker" id="month-picker">February</span>
+                            <div class="year-picker">
+                                <span class="year-change" id="prev-year">
+                                    <pre></pre>
+                                </span>
+                                <span id="year">2021</span>
+                                <span class="year-change" id="next-year">
+                                    <pre>></pre>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="calendar-body">
+                            <div class="calendar-week-day">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div class="calendar-days"></div>
+                        </div>
+                        <div class="month-list"></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+          <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+          <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+
+          
+    </body>
+</html>
